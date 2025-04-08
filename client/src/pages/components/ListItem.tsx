@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
 import Button from './Button';
 
+interface ListItemProps {
+  id: number, 
+  name: string, 
+  description: string, 
+  onClick: (id: number) => void, isactive: boolean
+}
 
-const ListItem: React.FC<any> = ({ id, name, description, onClick, isactive }) => {
+const ListItem: React.FC<ListItemProps> = ({ id, name, description, onClick, isactive }) => {
   return (
     <li className={isactive ? 'list-item active' : 'list-item'}>
         <Link to={`/${id}`}>
@@ -21,4 +27,4 @@ const ListItem: React.FC<any> = ({ id, name, description, onClick, isactive }) =
 };
 
 
-export default ListItem;
+export default memo(ListItem);
