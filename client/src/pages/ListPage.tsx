@@ -1,29 +1,27 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { memo, useCallback, useDebugValue, useEffect, useMemo, useState } from 'react';
 import { ListItem } from './components';
 import useData from './useData';
 import useSort from './useSort';
 
-const SubTitle: React.FC<any> = ({children}) => (
+const SubTitle: React.FC<{children: number | string}> = memo(({children}) => (
     <h2 className={'list-subtitle'}>Active Item ID: {children}</h2>
-)
+))
 
 function ListPage() {
     const items = useData();
     const [sortedItems, sortBy, handleSortClick] = useSort(items);
-    
-    const [activeItemId,  setActiveItemId] = useState<any>(null);
+    const [activeItemId,  setActiveItemId] = useState<number | null>(null);
     const [filteredItems, setFilteredItems] = useState<any[]>([]);
     const [query, setQuery] = useState<string>('');
+    const activeItemText = useMemo(() => typeof activeItemId === 'number' ? activeItemId : 'Empty', [activeItemId]);
     
-    const activeItemText = useMemo(() => activeItemId ? activeItemId : 'Empty', []);
+    const handleItemClick = useCallback((id: number) => {
+        setActiveItemId(id);
+    }, []);
     
-  const handleItemClick = (id: any) => {
-    setActiveItemId(id);
-  };
-  
-  const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setQuery(event.target.value);
-  }
+    const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setQuery(event.target.value);
+    }
     
     useEffect(() => {
         setFilteredItems(sortedItems);
@@ -46,9 +44,9 @@ function ListPage() {
         <div className="list-container">
             <div className="list">
                 {filteredItems.length === 0 && <span>Loading...</span>}
-                {filteredItems.map((item, index) => (
+                {filteredItems.map((item) => (
                     <ListItem
-                        key={index}
+                        key={item.id}
                         isactive={activeItemId===item.id}
                         id={item.id}
                         name={item.name}
@@ -62,4 +60,4 @@ function ListPage() {
   );
 }
 
-export default ListPage;
+export default memo(ListPage);
