@@ -26,12 +26,14 @@ function ListPage() {
     useEffect(() => {
         setFilteredItems(sortedItems);
     }, [sortedItems]);
-  
+
     useEffect(() => {
         if (query.length > 0) {
-            setFilteredItems(filteredItems.filter(item => `${item.id}`.includes(query.toLowerCase().trimStart().trimEnd().replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))));
+            setFilteredItems(sortedItems.filter(item => `${item.id}`.includes(query.toLowerCase().trimStart().trimEnd().replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))));
+        } else {
+            setFilteredItems(sortedItems);
         }
-    }, [query, filteredItems]);
+    }, [query, sortedItems]);
 
   return (
     <div className={'list-wrapper'}>
