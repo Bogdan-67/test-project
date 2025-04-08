@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useDebugValue, useEffect, useMemo, useState } from 'react';
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { ListItem } from './components';
 import useData from './useData';
 import useSort from './useSort';
@@ -8,7 +8,7 @@ const SubTitle: React.FC<{children: number | string}> = memo(({children}) => (
 ))
 
 function ListPage() {
-    const items = useData();
+    const [items, isLoading, error] = useData();
     const [sortedItems, sortBy, handleSortClick] = useSort(items);
     const [activeItemId,  setActiveItemId] = useState<number | null>(null);
     const [filteredItems, setFilteredItems] = useState<any[]>([]);
@@ -41,11 +41,16 @@ function ListPage() {
             <h1 className={'list-title'}>Items List</h1>
             <SubTitle>{activeItemText}</SubTitle>
             <button onClick={handleSortClick}>Sort ({sortBy === 'ASC' ? 'ASC' : 'DESC'})</button>
-            <input type="text" placeholder={'Filter by ID'} value={query} onChange={handleQueryChange} />
+            <input type="number" placeholder={'Filter by ID'} value={query} onChange={handleQueryChange} />
         </div>
         <div className="list-container">
             <div className="list">
-                {filteredItems.length === 0 && <span>Loading...</span>}
+                {isLoading && !filteredItems.length 
+                    ? <span>Loading...</span> 
+                    : error 
+                    ? <span>Error: {error}</span> 
+                    : null}
+                {!isLoading && filteredItems.length === 0 ? <span>No data</span> : null}
                 {filteredItems.map((item) => (
                     <ListItem
                         key={item.id}
