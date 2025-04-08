@@ -1,19 +1,24 @@
 services:
   client:
-    image: node:12-alpine
+    build:
+      context: ./client
+      dockerfile: Dockerfile
     working_dir: /app
     env_file:
       - .env
     ports:
       - "${DOCKER_CLIENT_PORT}:${DOCKER_CLIENT_PORT}"
+    environment:
+      - WATCHPACK_POLLING=true
     depends_on:
       - server
     volumes:
       - ./client:/app
-    command: ["./run.sh"]
 
   server:
-    image: golang:1.24.1-alpine
+    build:
+      context: ./server
+      dockerfile: Dockerfile
     working_dir: /app
     env_file:
       - .env
@@ -21,4 +26,3 @@ services:
       - "${DOCKER_SERVER_PORT}:${DOCKER_SERVER_PORT}"
     volumes:
       - "./server:/app"
-    command: ["./run.sh"]
