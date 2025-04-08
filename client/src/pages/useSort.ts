@@ -1,18 +1,18 @@
 import { useMemo, useState } from 'react';
 
-function useSort(items: any[]): [any[], any, any] {
+function useSort(items: readonly any[]): [any[], any, any] {
 	const [sortBy, setSortBy] = useState('ASC');
 	
 	const sortedItems = useMemo(() => {
-		if (sortBy === 'DESC') {
-			return items;
-		}
-		
 		if (sortBy === 'ASC') {
-			return items.sort((a, b) => b.id - a.id)
+			return [...items];
 		}
 		
-		return items;
+		if (sortBy === 'DESC') {
+			return [...items].sort((a, b) => b.id - a.id);
+		}
+		
+		return [...items];
 	}, [items, sortBy]);
 	
 	const handleSortClick = () => {
@@ -25,7 +25,7 @@ function useSort(items: any[]): [any[], any, any] {
 		}
 	}
 	
-	return [sortedItems, sortBy, handleSortClick]
+	return [sortedItems, sortBy, handleSortClick];
 }
 
 export default useSort;
