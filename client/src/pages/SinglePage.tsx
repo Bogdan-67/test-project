@@ -15,6 +15,7 @@ function SinglePage() {
 
   const fetchItem = async () => {
     try {
+      setIsLoading(true);
       const res = await fetch(`${process.env.API_URL}/items/${id}`);
       if (!res.ok) {
         const text = await res.text();
@@ -35,6 +36,7 @@ function SinglePage() {
   }, []);
 
   // useEffect(() => {
+  //   setIsLoading(true);
   //   fetch(`${process.env.API_URL}/items/${id}`)
   //     .then(res => {
   //       if (!res.ok) {
