@@ -1,6 +1,13 @@
 import React, { memo, useCallback } from 'react';
 
-const Button: React.FC<any> = ({ onClick, id, disabled, children }) => {
+interface ButtonProps {
+  onClick: (id: number) => void;
+  id: number;
+  disabled: boolean;
+  children: string;
+}
+
+const Button: React.FC<ButtonProps> = ({ onClick, id, disabled, children }) => {
 	const handleClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
 		e.stopPropagation();
 		e.preventDefault();
