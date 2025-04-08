@@ -1,7 +1,9 @@
 import React, { memo, useCallback } from 'react';
 
 const Button: React.FC<any> = ({ onClick, id, disabled, children }) => {
-	const handleClick = useCallback(() => {
+	const handleClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+		e.stopPropagation();
+		e.preventDefault();
 		onClick(id);
 	}, []);
 	
